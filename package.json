@@ -9,7 +9,7 @@
     "lint": "npx eslint . --color --fix --quiet"
   },
   "keywords": [],
-  "author": "",
+  "author": "Dushko Alina",
   "license": "ISC",
   "dependencies": {
     "@playwright/test": "^1.37.1"
