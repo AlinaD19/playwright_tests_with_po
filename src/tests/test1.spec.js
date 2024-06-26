@@ -12,8 +12,7 @@ test.describe('Test 1', () => {
 
     test('Perform and verify A to Z sorting on the Inventory page', async ({ inventoryPage }) => {
         await inventoryPage.selectSortingOption('az');
-        let itemsNameAtoZ = [];
-        itemsNameAtoZ = await inventoryPage.getAllItemsName();
+        const itemsNameAtoZ = await inventoryPage.getAllItemsName();
         const sortedItemsNameAtoZ = [...itemsNameAtoZ].sort();
 
         expect(itemsNameAtoZ).toEqual(sortedItemsNameAtoZ);
