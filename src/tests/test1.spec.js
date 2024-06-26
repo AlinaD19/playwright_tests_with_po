@@ -10,34 +10,36 @@ test.describe('Test 1', () => {
         await expect(inventoryPage.headerTitle).toBeVisible();
     });
 
-    test('Perform and verify sorting on the Inventory page', async ({ inventoryPage }) => {
-        await inventoryPage.performSortingList();
-        // Verify sorting A to Z
+    test('Perform and verify A to Z sorting on the Inventory page', async ({ inventoryPage }) => {
         await inventoryPage.selectSortingOption('az');
-        let itemsName = await inventoryPage.getAllItemsName();
-        const sortedItemsNameAtoZ = [...itemsName].sort();
+        let itemsNameAtoZ = [];
+        itemsNameAtoZ = await inventoryPage.getAllItemsName();
+        const sortedItemsNameAtoZ = [...itemsNameAtoZ].sort();
 
-        expect(itemsName).toEqual(sortedItemsNameAtoZ);
+        expect(itemsNameAtoZ).toEqual(sortedItemsNameAtoZ);
+    });
 
-        // Verify sorting Z to A
+    test('Perform and verify Z to A sorting on the Inventory page', async ({ inventoryPage }) => {
         await inventoryPage.selectSortingOption('za');
-        itemsName = await inventoryPage.getAllItemsName();
-        const sortedItemsNameZtoA = [...itemsName].sort().reverse();
+        const itemsNameZtoA = await inventoryPage.getAllItemsName();
+        const sortedItemsNameZtoA = [...itemsNameZtoA].sort().reverse();
 
-        expect(itemsName).toEqual(sortedItemsNameZtoA);
+        expect(itemsNameZtoA).toEqual(sortedItemsNameZtoA);
+    });
 
-        // Verify sorting low to high
+    test('Perform and verify Low to High sorting on the Inventory page', async ({ inventoryPage }) => {
         await inventoryPage.selectSortingOption('lohi');
-        let itemsPrices = await inventoryPage.getAllItemsPrice();
-        const sortedItemsPriceLtoH = [...itemsPrices].sort((a, b) => a - b);
+        const itemsPricesLtoH = await inventoryPage.getAllItemsPrice();
+        const sortedItemsPriceLtoH = [...itemsPricesLtoH].sort((a, b) => a - b);
 
-        expect(itemsPrices).toEqual(sortedItemsPriceLtoH);
+        expect(itemsPricesLtoH).toEqual(sortedItemsPriceLtoH);
+    });
 
-        // Verify sorting high to low
+    test('Perform and verify High to Low sorting on the Inventory page', async ({ inventoryPage }) => {
         await inventoryPage.selectSortingOption('hilo');
-        itemsPrices = await inventoryPage.getAllItemsPrice();
-        const sortedItemsPriceHtoL = [...itemsPrices].sort((a, b) => b - a);
+        const itemsPricesHtoL = await inventoryPage.getAllItemsPrice();
+        const sortedItemsPriceHtoL = [...itemsPricesHtoL].sort((a, b) => b - a);
 
-        expect(itemsPrices).toEqual(sortedItemsPriceHtoL);
+        expect(itemsPricesHtoL).toEqual(sortedItemsPriceHtoL);
     });
 });
