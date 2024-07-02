@@ -2,7 +2,7 @@ const { expect } = require('@playwright/test');
 const { test } = require('../fixture');
 const { login, password } = require('../credentials/credentials.json');
 
-test.describe('Test 2', () => {
+test.describe('Test two: add products to cart and verify them', () => {
     test.beforeEach(async ({ loginPage, inventoryPage }) => {
         await loginPage.navigate();
         await loginPage.performLogin(login, password);
@@ -29,14 +29,12 @@ test.describe('Test 2', () => {
         // Verify if defined number of items are added to the Shopping Cart
         await expect(inventoryPage.shopingCartBadge).toHaveText(addedItemsInCart);
 
-        // Collect all Names, Prices, Decriptions from Inventory Page
+        // Collect all Names, Prices, Decriptions from Inventory Page to compare them with data in Shopping Cart
         const allInventoryItemsName = await inventoryPage.getAllItemsName();
         const allInventoryItemsPrice = await inventoryPage.getAllItemsPrice();
         const allInventoryItemsDescription = await inventoryPage.gettAllItemsDescription();
 
         await inventoryPage.shopingCart.click();
-        const itemsInCart = await shopingCartPage.cartItems.count();
-        expect(itemsInCart).toBeGreaterThanOrEqual(1);
 
         // Collect all Names, Prices, Decriptions from Shopping Cart Page
         const allCartItemsName = await shopingCartPage.getAllCartItemsName();
@@ -71,7 +69,7 @@ test.describe('Test 2', () => {
             }
         });
 
-        // Check if length of maches elements the same as items in cart
-        expect(allCartItemsInformation.length).toEqual(matches.length);
+        // Check if an array of items in the cart is the same as already found matching items
+        expect(allCartItemsInformation).toEqual(expect.arrayContaining(matches));
     });
 });
