@@ -15,6 +15,29 @@ export class InventoryPage extends BaseSwagLabPage {
 
     get inventoryItemPrice() { return this.page.locator('[data-test=inventory-item-price]'); }
 
+    get inventoryItemDescription() { return this.page.locator('.inventory_item_desc'); }
+
+    async getNumberOfItems() {
+        const numberOfItems = await this.inventoryItems.count();
+        return numberOfItems;
+    }
+
+    async arrayOfRandomItemIndex() {
+        const arrayOfRandomItemIndex = [];
+        const numberPerPage = await this.getNumberOfItems();
+        for (let i = 0; i < numberPerPage; i += 1) {
+            const randomItem = Math.floor(Math.random() * 5);
+            arrayOfRandomItemIndex.push(randomItem);
+        }
+        return arrayOfRandomItemIndex;
+    }
+
+    async getAllItemAddToCartButtonsId() {
+        const allButtonsId = await this.addItemToCartBtns.all();
+        const ids = await Promise.all(allButtonsId.map(async (element) => element.getAttribute('id')));
+        return ids;
+    }
+
     async addItemToCartById(id) {
         await this.addItemToCartBtns.nth(id).click();
     }
@@ -31,5 +54,9 @@ export class InventoryPage extends BaseSwagLabPage {
         return this.inventoryItemPrice.allInnerTexts((price) => {
             price.map((itemPrice) => itemPrice.match(/\d+(\.\d+)?/g));
         });
+    }
+
+    async gettAllItemsDescription() {
+        return this.inventoryItemDescription.allInnerTexts();
     }
 }

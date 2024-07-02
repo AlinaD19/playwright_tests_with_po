@@ -26,6 +26,8 @@ module.exports = {
     },
     rules: {
         'import/prefer-default-export': 'off',
+        'playwright/no-conditional-in-test': 'off',
+        'no-await-in-loop': 'off',
         indent: [
             'error',
             4,
