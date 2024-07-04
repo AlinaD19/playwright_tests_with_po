@@ -19,38 +19,19 @@ export class CheckoutSecondPage extends ShopingCartPage {
         await this.finishButton.click();
     }
 
-    // eslint-disable-next-line class-methods-use-this
-    async extractNumberFromStr(str) {
-        const match = str.match(/\$([\d.]+)/);
-        let number;
-        if (match) {
-            const numberString = match[1];
-            number = parseFloat(numberString);
-        }
-        return number;
-    }
-
-    /* async getNumberOfItemsOnCheckout() {
-        const numberOfItems = this.checkoutItems.count();
-        return numberOfItems;
-    } */
-
     async getItemsTotalOnPage() {
         const itemsTotal = await this.itemsTotal.innerText();
-        const price = this.extractNumberFromStr(itemsTotal);
-        return price;
+        return itemsTotal;
     }
 
     async getItemsTaxOnPage() {
         const taxTotal = await this.itemsTax.innerText();
-        const price = this.extractNumberFromStr(taxTotal);
-        return price;
+        return taxTotal;
     }
 
     async getOrderTotalPriceOnPage() {
         const orderTotalPrice = await this.orderTotalPrice.innerText();
-        const price = this.extractNumberFromStr(orderTotalPrice);
-        return price;
+        return orderTotalPrice;
     }
 
     async getAllCheckoutItemsPrice() {

@@ -1,6 +1,7 @@
 const { expect } = require('@playwright/test');
 const { test } = require('../fixture');
 const { login, password } = require('../credentials/credentials.json');
+const { arrayOfRandomItemIndex } = require('../utils/methods.page');
 
 test.describe('Test two: add products to cart and verify them', () => {
     test.beforeEach(async ({ loginPage, inventoryPage }) => {
@@ -11,49 +12,22 @@ test.describe('Test two: add products to cart and verify them', () => {
     });
 
     test('Add several random products to the Shopping Cart and verify their Name, Price and Description', async ({ inventoryPage, shopingCartPage }) => {
-        // Get array of random index and create an array of unic index
-        const arrayOfRandomIndex = await inventoryPage.arrayOfRandomItemIndex();
-        const unicRandomIndex = [...new Set(arrayOfRandomIndex)];
-        // Count how many elements per page
-        let itemsOnPageAfterAdding = await inventoryPage.getNumberOfItems();
-
         // Perform adding random quantity of random items to the Shopping Cart
+        const unicRandomIndex = arrayOfRandomItemIndex(await inventoryPage.getNumberOfItems());
         for (let i = 0; i < unicRandomIndex.length; i += 1) {
-            if (unicRandomIndex[i] < itemsOnPageAfterAdding) {
-                await inventoryPage.addItemToCartById(unicRandomIndex[i]);
-                itemsOnPageAfterAdding -= 1;
-            }
+            await inventoryPage.addItemToCartById(unicRandomIndex[i]);
         }
-        // Count how many items were added to the Shopping Cart
-        const addedItemsInCart = await inventoryPage.getNumberOfItemsInCart();
         // Verify if defined number of items are added to the Shopping Cart
+        const addedItemsInCart = await inventoryPage.getNumberOfItemsInCart();
         await expect(inventoryPage.shopingCartBadge).toHaveText(addedItemsInCart);
 
         // Collect all Names, Prices, Decriptions from Inventory Page to compare them with data in Shopping Cart
-        const allInventoryItemsName = await inventoryPage.getAllItemsName();
-        const allInventoryItemsPrice = await inventoryPage.getAllItemsPrice();
-        const allInventoryItemsDescription = await inventoryPage.gettAllItemsDescription();
+        const allInventoryItemsInformation = await shopingCartPage.collectedItems();
 
         await inventoryPage.shopingCart.click();
 
         // Collect all Names, Prices, Decriptions from Shopping Cart Page
-        const allCartItemsName = await shopingCartPage.getAllCartItemsName();
-        const allCartItemsPrice = await shopingCartPage.getAllCartItemsPrice();
-        const allCartItemsDescription = await shopingCartPage.gettAllCartItemsDescription();
-
-        // Create an array of objects of all Items on Inventory Page
-        const allInventoryItemsInformation = allInventoryItemsName.map((name, index) => ({
-            name,
-            price: allInventoryItemsPrice[index],
-            description: allInventoryItemsDescription[index],
-        }));
-
-        // Create an array of objects of all Items on Shopping Cart page
-        const allCartItemsInformation = allCartItemsName.map((name, index) => ({
-            name,
-            price: allCartItemsPrice[index],
-            description: allCartItemsDescription[index],
-        }));
+        const allCartItemsInformation = await shopingCartPage.collectedItems();
 
         // Create an array of matches elements
         const matches = [];

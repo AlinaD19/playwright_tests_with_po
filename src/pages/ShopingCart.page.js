@@ -52,6 +52,7 @@ export class ShopingCartPage extends BaseSwagLabPage {
         return numberOfItems;
     }
 
+    // Method is create to collect name, decription and price into one object with relates properties
     async collectedItems() {
         const names = await this.getAllCartItemsName();
         const prices = await this.getAllCartItemsPrice();
@@ -59,7 +60,6 @@ export class ShopingCartPage extends BaseSwagLabPage {
 
         const allItemsInformation = [];
 
-        // Assuming names, prices, and descriptions arrays have the same length
         for (let i = 0; i < names.length; i += 1) {
             const item = {
                 name: names[i],
