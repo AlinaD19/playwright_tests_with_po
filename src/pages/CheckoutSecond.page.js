@@ -1,6 +1,6 @@
-const { ShopingCartPage } = require('./ShopingCart.page');
+const { BaseSwagLabPage } = require('./BaseSwagLab.page');
 
-export class CheckoutSecondPage extends ShopingCartPage {
+export class CheckoutSecondPage extends BaseSwagLabPage {
     url = '/checkout-step-two.html';
 
     get headerTitle() { return this.page.locator('.title'); }
@@ -15,27 +15,56 @@ export class CheckoutSecondPage extends ShopingCartPage {
 
     get orderTotalPrice() { return this.page.locator('.summary_total_label'); }
 
+    get checkoutItemName() { return this.page.locator('.inventory_item_name'); }
+
+    get checkoutItemPrice() { return this.page.locator('.inventory_item_price'); }
+
+    get checkoutItemDescription() { return this.page.locator('.inventory_item_desc'); }
+
     async goToFinishCheckoutFlow() {
         await this.finishButton.click();
     }
 
     async getItemsTotalOnPage() {
-        const itemsTotal = await this.itemsTotal.innerText();
-        return itemsTotal;
+        return this.itemsTotal.innerText();
     }
 
     async getItemsTaxOnPage() {
-        const taxTotal = await this.itemsTax.innerText();
-        return taxTotal;
+        return this.itemsTax.innerText();
     }
 
     async getOrderTotalPriceOnPage() {
-        const orderTotalPrice = await this.orderTotalPrice.innerText();
-        return orderTotalPrice;
+        return this.orderTotalPrice.innerText();
     }
 
     async getAllCheckoutItemsPrice() {
-        const allPrices = await this.iNCartItemPrice.allInnerTexts();
-        return allPrices.map((price) => parseFloat(price.replace('$', '')));
+        return this.checkoutItemPrice.allInnerTexts();
+    }
+
+    async getAllCheckoutItemsName() {
+        return this.checkoutItemName.allInnerTexts();
+    }
+
+    async gettAllCheckoutItemsDescription() {
+        return this.checkoutItemDescription.allInnerTexts();
+    }
+
+    // Method is create to collect name, decription and price into one object with relates properties
+    async collectedItems() {
+        const names = await this.getAllCheckoutItemsName();
+        const prices = await this.getAllCheckoutItemsPrice();
+        const descriptions = await this.gettAllCheckoutItemsDescription();
+
+        const allItemsInformation = [];
+
+        for (let i = 0; i < names.length; i += 1) {
+            const item = {
+                name: names[i],
+                price: prices[i],
+                description: descriptions[i],
+            };
+            allItemsInformation.push(item);
+        }
+        return allItemsInformation;
     }
 }

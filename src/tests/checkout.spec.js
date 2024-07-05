@@ -1,8 +1,8 @@
 const { expect } = require('@playwright/test');
 const { test } = require('../fixture');
 const { login, password } = require('../credentials/credentials.json');
-const { extractNumberFromStr } = require('../utils/methods.page');
-const { arrayOfRandomItemIndex } = require('../utils/methods.page');
+const { firstName, lastName, zipCode } = require('../credentials/test_data.json');
+const { extractNumberFromStr, arrayOfRandomItemIndex } = require('../utils/methods');
 
 test.describe('Test three: Checkout page', () => {
     test.beforeEach(async ({ loginPage, inventoryPage }) => {
@@ -36,9 +36,9 @@ test.describe('Test three: Checkout page', () => {
         await expect(checkoutFirstPage.headerTitle).toBeVisible();
 
         // Fill in all required fields
-        await checkoutFirstPage.firstNameField.fill('Rayan');
-        await checkoutFirstPage.lastNameField.fill('Gosling');
-        await checkoutFirstPage.zipCodeField.fill('12345');
+        await checkoutFirstPage.firstNameField.fill(firstName);
+        await checkoutFirstPage.lastNameField.fill(lastName);
+        await checkoutFirstPage.zipCodeField.fill(zipCode);
 
         // Go to Second Checkout step and verify page
         await checkoutFirstPage.goToSecondCheckputStep();

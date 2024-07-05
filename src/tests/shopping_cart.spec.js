@@ -1,7 +1,7 @@
 const { expect } = require('@playwright/test');
 const { test } = require('../fixture');
 const { login, password } = require('../credentials/credentials.json');
-const { arrayOfRandomItemIndex } = require('../utils/methods.page');
+const { arrayOfRandomItemIndex } = require('../utils/methods');
 
 test.describe('Test two: add products to cart and verify them', () => {
     test.beforeEach(async ({ loginPage, inventoryPage }) => {

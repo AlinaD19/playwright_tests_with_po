@@ -2,7 +2,7 @@ const { expect } = require('@playwright/test');
 const { test } = require('../fixture');
 const { login, password } = require('../credentials/credentials.json');
 
-test.describe('Test 1', () => {
+test.describe('Test one: verify sorting on Inventory page', () => {
     test.beforeEach(async ({ loginPage, inventoryPage }) => {
         await loginPage.navigate();
         await loginPage.performLogin(login, password);
