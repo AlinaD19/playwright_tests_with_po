@@ -17,6 +17,8 @@ export class ShopingCartPage extends BaseSwagLabPage {
 
     get iNCartItemDescription() { return this.page.locator('.inventory_item_desc'); }
 
+    get checkoutButton() { return this.page.locator('[data-test="checkout"]'); }
+
     // async below added to show the function returns a promise
     async getCartItemByName(name) { return this.page.locator(this.cartItemSelector, { hasText: name }); }
 
@@ -39,5 +41,33 @@ export class ShopingCartPage extends BaseSwagLabPage {
 
     async gettAllCartItemsDescription() {
         return this.iNCartItemDescription.allInnerTexts();
+    }
+
+    async goToCheckoutStep() {
+        await this.checkoutButton.click();
+    }
+
+    async getNumberOfItemsInCart() {
+        const numberOfItems = await this.cartItems.count();
+        return numberOfItems;
+    }
+
+    // Method is create to collect name, decription and price into one object with relates properties
+    async collectedItems() {
+        const names = await this.getAllCartItemsName();
+        const prices = await this.getAllCartItemsPrice();
+        const descriptions = await this.gettAllCartItemsDescription();
+
+        const allItemsInformation = [];
+
+        for (let i = 0; i < names.length; i += 1) {
+            const item = {
+                name: names[i],
+                price: prices[i],
+                description: descriptions[i],
+            };
+            allItemsInformation.push(item);
+        }
+        return allItemsInformation;
     }
 }

@@ -22,16 +22,6 @@ export class InventoryPage extends BaseSwagLabPage {
         return numberOfItems;
     }
 
-    async arrayOfRandomItemIndex() {
-        const arrayOfRandomItemIndex = [];
-        const numberPerPage = await this.getNumberOfItems();
-        for (let i = 0; i < numberPerPage; i += 1) {
-            const randomItem = Math.floor(Math.random() * 5);
-            arrayOfRandomItemIndex.push(randomItem);
-        }
-        return arrayOfRandomItemIndex;
-    }
-
     async getAllItemAddToCartButtonsId() {
         const allButtonsId = await this.addItemToCartBtns.all();
         const ids = await Promise.all(allButtonsId.map(async (element) => element.getAttribute('id')));
@@ -46,17 +36,36 @@ export class InventoryPage extends BaseSwagLabPage {
         await this.productSortingList.selectOption(value);
     }
 
-    async getAllItemsName() {
+    async getAllInventoryItemsName() {
         return this.inventoryItemName.allInnerTexts();
     }
 
-    async getAllItemsPrice() {
+    async getAllInventoryItemsPrice() {
         return this.inventoryItemPrice.allInnerTexts((price) => {
             price.map((itemPrice) => itemPrice.match(/\d+(\.\d+)?/g));
         });
     }
 
-    async gettAllItemsDescription() {
+    async gettAllInventoryItemsDescription() {
         return this.inventoryItemDescription.allInnerTexts();
+    }
+
+    // Method is create to collect name, decription and price into one object with relates properties
+    async collectedItems() {
+        const names = await this.getAllInventoryItemsName();
+        const prices = await this.getAllInventoryItemsPrice();
+        const descriptions = await this.gettAllInventoryItemsDescription();
+
+        const allItemsInformation = [];
+
+        for (let i = 0; i < names.length; i += 1) {
+            const item = {
+                name: names[i],
+                price: prices[i],
+                description: descriptions[i],
+            };
+            allItemsInformation.push(item);
+        }
+        return allItemsInformation;
     }
 }

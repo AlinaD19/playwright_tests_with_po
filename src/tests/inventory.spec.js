@@ -2,7 +2,7 @@ const { expect } = require('@playwright/test');
 const { test } = require('../fixture');
 const { login, password } = require('../credentials/credentials.json');
 
-test.describe('Test 1', () => {
+test.describe('Test one: verify sorting on Inventory page', () => {
     test.beforeEach(async ({ loginPage, inventoryPage }) => {
         await loginPage.navigate();
         await loginPage.performLogin(login, password);
@@ -12,7 +12,7 @@ test.describe('Test 1', () => {
 
     test('Perform and verify A to Z sorting on the Inventory page', async ({ inventoryPage }) => {
         await inventoryPage.selectSortingOption('az');
-        const itemsNameAtoZ = await inventoryPage.getAllItemsName();
+        const itemsNameAtoZ = await inventoryPage.getAllInventoryItemsName();
         const sortedItemsNameAtoZ = [...itemsNameAtoZ].sort();
 
         expect(itemsNameAtoZ).toEqual(sortedItemsNameAtoZ);
@@ -20,7 +20,7 @@ test.describe('Test 1', () => {
 
     test('Perform and verify Z to A sorting on the Inventory page', async ({ inventoryPage }) => {
         await inventoryPage.selectSortingOption('za');
-        const itemsNameZtoA = await inventoryPage.getAllItemsName();
+        const itemsNameZtoA = await inventoryPage.getAllInventoryItemsName();
         const sortedItemsNameZtoA = [...itemsNameZtoA].sort().reverse();
 
         expect(itemsNameZtoA).toEqual(sortedItemsNameZtoA);
@@ -28,7 +28,7 @@ test.describe('Test 1', () => {
 
     test('Perform and verify Low to High sorting on the Inventory page', async ({ inventoryPage }) => {
         await inventoryPage.selectSortingOption('lohi');
-        const itemsPricesLtoH = await inventoryPage.getAllItemsPrice();
+        const itemsPricesLtoH = await inventoryPage.getAllInventoryItemsPrice();
         const sortedItemsPriceLtoH = [...itemsPricesLtoH].sort((a, b) => a - b);
 
         expect(itemsPricesLtoH).toEqual(sortedItemsPriceLtoH);
@@ -36,7 +36,7 @@ test.describe('Test 1', () => {
 
     test('Perform and verify High to Low sorting on the Inventory page', async ({ inventoryPage }) => {
         await inventoryPage.selectSortingOption('hilo');
-        const itemsPricesHtoL = await inventoryPage.getAllItemsPrice();
+        const itemsPricesHtoL = await inventoryPage.getAllInventoryItemsPrice();
         const sortedItemsPriceHtoL = [...itemsPricesHtoL].sort((a, b) => b - a);
 
         expect(itemsPricesHtoL).toEqual(sortedItemsPriceHtoL);
